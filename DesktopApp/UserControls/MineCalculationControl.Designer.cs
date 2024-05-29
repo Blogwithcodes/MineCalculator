@@ -125,7 +125,7 @@ namespace DesktopApp.UserControls
             label1.Name = "label1";
             label1.Size = new Size(88, 28);
             label1.TabIndex = 2;
-            label1.Text = "Fontage";
+            label1.Text = "Frontage";
             // 
             // frontage_tb
             // 
