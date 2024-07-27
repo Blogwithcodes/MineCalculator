@@ -1,4 +1,5 @@
-﻿using DesktopApp.Model;
+﻿using DesktopApp.HelperClass;
+using DesktopApp.Model;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace DesktopApp.UserControls
@@ -35,6 +36,9 @@ namespace DesktopApp.UserControls
             DropDownModel dropDownModel1 = new DropDownModel();
             DropDownModel dropDownModel2 = new DropDownModel();
             DropDownModel dropDownModel3 = new DropDownModel();
+            DropDownModel dropDownModel4 = new DropDownModel();
+            DropDownModel dropDownModel5 = new DropDownModel();
+            DropDownModel dropDownModel6 = new DropDownModel();
             label1 = new Label();
             frontage_tb = new TextBox();
             label2 = new Label();
@@ -102,6 +106,8 @@ namespace DesktopApp.UserControls
             timer1 = new System.Windows.Forms.Timer(components);
             toasterTimer = new System.Windows.Forms.Timer(components);
             panel2 = new Panel();
+            Terrain_Dropdown = new ComboBox();
+            lbl_terrain = new Label();
             arms_dropdown = new ComboBox();
             label33 = new Label();
             panel3.SuspendLayout();
@@ -123,7 +129,7 @@ namespace DesktopApp.UserControls
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             label1.Location = new Point(18, 21);
             label1.Name = "label1";
-            label1.Size = new Size(88, 28);
+            label1.Size = new Size(96, 28);
             label1.TabIndex = 2;
             label1.Text = "Frontage";
             // 
@@ -804,6 +810,8 @@ namespace DesktopApp.UserControls
             // 
             // panel2
             // 
+            panel2.Controls.Add(Terrain_Dropdown);
+            panel2.Controls.Add(lbl_terrain);
             panel2.Controls.Add(arms_dropdown);
             panel2.Controls.Add(label33);
             panel2.Location = new Point(703, 77);
@@ -812,21 +820,49 @@ namespace DesktopApp.UserControls
             panel2.Size = new Size(282, 115);
             panel2.TabIndex = 45;
             // 
+            // Terrain_Dropdown
+            // 
+            Terrain_Dropdown.DropDownStyle = ComboBoxStyle.DropDownList;
+            Terrain_Dropdown.FormattingEnabled = true;
+            dropDownModel1.Label = "Mountains";
+            dropDownModel1.Value = (int)Terrain.Mountains;
+            dropDownModel2.Label = "Plains";
+            dropDownModel2.Value = (int)Terrain.Plains;
+            dropDownModel3.Label = "Deserts";
+            dropDownModel3.Value = (int)Terrain.Deserts;
+            Terrain_Dropdown.Items.AddRange(new object[] { dropDownModel1, dropDownModel2, dropDownModel3 });
+            Terrain_Dropdown.Location = new Point(119, 68);
+            Terrain_Dropdown.Name = "Terrain_Dropdown";
+            Terrain_Dropdown.Size = new Size(151, 28);
+            Terrain_Dropdown.TabIndex = 14;
+            // 
+            // lbl_terrain
+            // 
+            lbl_terrain.AutoSize = true;
+            lbl_terrain.Font = new Font("Arial", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            lbl_terrain.Location = new Point(56, 72);
+            lbl_terrain.Name = "lbl_terrain";
+            lbl_terrain.Size = new Size(59, 19);
+            lbl_terrain.TabIndex = 13;
+            lbl_terrain.Text = "Terrain";
+            lbl_terrain.TextAlign = ContentAlignment.TopCenter;
+            // 
             // arms_dropdown
             // 
             arms_dropdown.DropDownStyle = ComboBoxStyle.DropDownList;
             arms_dropdown.FormattingEnabled = true;
-            dropDownModel1.Label = "Infantry";
-            dropDownModel1.Value = 500;
-            dropDownModel2.Label = "Engineer";
-            dropDownModel2.Value = 700;
-            dropDownModel3.Label = "PMF";
-            dropDownModel3.Value = 350;
-            arms_dropdown.Items.AddRange(new object[] { dropDownModel1, dropDownModel2, dropDownModel3 });
+            dropDownModel4.Label = "Infantry";
+            dropDownModel4.Value = (int)Arms.Infantry;
+            dropDownModel5.Label = "Engineer";
+            dropDownModel5.Value = (int)Arms.Engineer;
+            dropDownModel6.Label = "PMF";
+            dropDownModel6.Value = (int)Arms.PMF;
+            arms_dropdown.Items.AddRange(new object[] { dropDownModel4, dropDownModel5, dropDownModel6 });
             arms_dropdown.Location = new Point(119, 35);
             arms_dropdown.Name = "arms_dropdown";
             arms_dropdown.Size = new Size(151, 28);
             arms_dropdown.TabIndex = 12;
+            arms_dropdown.SelectedIndexChanged += arms_dropdown_SelectedIndexChanged;
             arms_dropdown.SelectionChangeCommitted += ArmsChanged;
             // 
             // label33
@@ -952,5 +988,7 @@ namespace DesktopApp.UserControls
         private Panel panel2;
         private ComboBox arms_dropdown;
         private Label label33;
+        private Label lbl_terrain;
+        private ComboBox Terrain_Dropdown;
     }
 }

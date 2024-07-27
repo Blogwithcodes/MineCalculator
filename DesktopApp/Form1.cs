@@ -62,6 +62,7 @@ namespace DesktopApp
                 reviewButton.Visible = true;
                 bottomSidePanel.Visible = true;
                 MineFieldLayout_panel.Visible = true;
+                MineFeldReocrdPanel.Visible= true;
 
             }
             else
@@ -75,6 +76,7 @@ namespace DesktopApp
                 reviewButton.Visible = false;
                 bottomSidePanel.Visible = false;
                 MineFieldLayout_panel.Visible = false;
+                MineFeldReocrdPanel.Visible = false;
 
                 navigationControl.Display(0);
                 SetActiveButton(MineNavpanel);
@@ -91,6 +93,7 @@ namespace DesktopApp
                 new NiSignControl(sharedDataModel),
                 new ParameterMarkingStoreControl(sharedDataModel),
                 new TPTControl(sharedDataModel),
+                new MineFieldRecordControl(sharedDataModel),
                 new MineFieldLayoutControl(sharedDataModel),
                 new TemplateEditor(sharedDataModel)
             };
@@ -290,7 +293,7 @@ namespace DesktopApp
             {
                 userControl.InitCalculate();
             }
-            navigationControl.Display(7);
+            navigationControl.Display(8);
             var clickedControl = (Control)sender;
             SetActiveButton(clickedControl);
         }
@@ -366,8 +369,20 @@ namespace DesktopApp
         {
             TemplateEditor_Click(sender, e);
         }
+        private void MineFieldRecord_Click(object sender, EventArgs e)
+        {
 
+            MineFieldRecordControl userControl = GetInstance<MineFieldRecordControl>();
 
+            if (userControl != null)
+            {
+                userControl.InitCalculate();
+            }
+            navigationControl.Display(7);
+            var clickedControl = (Control)sender;
+            SetActiveButton(clickedControl);
+        }
+        
 
         private T GetInstance<T>() where T : UserControl
         {

@@ -36,6 +36,7 @@
             label6 = new Label();
             drawingPanel = new Panel();
             editPanel = new Panel();
+            Test_Btn = new Button();
             button3 = new Button();
             button2 = new Button();
             savebtn = new Button();
@@ -88,7 +89,7 @@
             panel1.Controls.Add(dataGridView1);
             panel1.Location = new Point(26, 52);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1111, 746);
+            panel1.Size = new Size(1111, 831);
             panel1.TabIndex = 5;
             // 
             // drawingContainerPanel
@@ -98,7 +99,7 @@
             drawingContainerPanel.Controls.Add(drawingPanel);
             drawingContainerPanel.Location = new Point(17, 383);
             drawingContainerPanel.Name = "drawingContainerPanel";
-            drawingContainerPanel.Size = new Size(1057, 360);
+            drawingContainerPanel.Size = new Size(1069, 445);
             drawingContainerPanel.TabIndex = 18;
             // 
             // label6
@@ -120,12 +121,13 @@
             drawingPanel.BackColor = Color.LightSkyBlue;
             drawingPanel.Location = new Point(12, 37);
             drawingPanel.Name = "drawingPanel";
-            drawingPanel.Size = new Size(704, 320);
+            drawingPanel.Size = new Size(728, 405);
             drawingPanel.TabIndex = 0;
             drawingPanel.Paint += DrawingPanel_Paint;
             // 
             // editPanel
             // 
+            editPanel.Controls.Add(Test_Btn);
             editPanel.Controls.Add(button3);
             editPanel.Controls.Add(button2);
             editPanel.Controls.Add(savebtn);
@@ -143,6 +145,19 @@
             editPanel.Name = "editPanel";
             editPanel.Size = new Size(1057, 154);
             editPanel.TabIndex = 5;
+            // 
+            // Test_Btn
+            // 
+            Test_Btn.BackColor = Color.SkyBlue;
+            Test_Btn.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            Test_Btn.ForeColor = Color.Black;
+            Test_Btn.Location = new Point(687, 106);
+            Test_Btn.Name = "Test_Btn";
+            Test_Btn.Size = new Size(163, 43);
+            Test_Btn.TabIndex = 18;
+            Test_Btn.Text = "Test";
+            Test_Btn.UseVisualStyleBackColor = false;
+            Test_Btn.Click += Test_Btn_Click_1;
             // 
             // button3
             // 
@@ -293,10 +308,11 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             Controls.Add(panel1);
             Controls.Add(label1);
             Name = "MineFieldLayoutControl";
-            Size = new Size(1156, 811);
+            Size = new Size(1156, 883);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             panel1.ResumeLayout(false);
             drawingContainerPanel.ResumeLayout(false);
@@ -331,5 +347,6 @@
         private Panel drawingContainerPanel;
         private Panel drawingPanel;
         private Label label6;
+        private Button Test_Btn;
     }
 }

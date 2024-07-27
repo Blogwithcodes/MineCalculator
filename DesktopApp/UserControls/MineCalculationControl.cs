@@ -1,4 +1,5 @@
-﻿using DesktopApp.Model;
+﻿using DesktopApp.HelperClass;
+using DesktopApp.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,6 +32,7 @@ namespace DesktopApp.UserControls
             Inf_safe_Line_tb.Text = "1";
             Depth_tb.Text = "300";
             arms_dropdown.SelectedIndex = 1;
+            Terrain_Dropdown.SelectedIndex = 1;
 
             // InitializeToastTimer();
         }
@@ -111,11 +113,12 @@ namespace DesktopApp.UserControls
                 Anit_Pers_Mines_Lbl.Text = CalculateNoOfMine(A_Pers_tb.Text, frontage_tb.Text);
                 Anti_Tank_Mines_lbl.Text = CalculateNoOfMine(A_Tk_tb.Text, frontage_tb.Text);
                 Anit_Mines_16_lbl.Text = CalculateNoOfMine(Frag_tb.Text, frontage_tb.Text);
-                DropDownModel selectedItem = (DropDownModel)arms_dropdown.SelectedItem;
-                sharedDataModel.RateOfLaying = selectedItem.Value;
+                DropDownModel armSelectedItem = (DropDownModel)arms_dropdown.SelectedItem;
+                DropDownModel terrainSelectedItem = (DropDownModel)Terrain_Dropdown.SelectedItem;
+                sharedDataModel.RateOfLaying = Helper.GetRateOfLaying((Arms)armSelectedItem.Value,(Terrain) terrainSelectedItem.Value);
                 //Time and Resources 
                 No_of_Mine_lbl.Text = CalculateTotalMines();
-                Rate_Of_Laying_lbl.Text = sharedDataModel.RateOfLaying.ToString() + " MINES/24 HR CYCLE BY "+((sharedDataModel.RateOfLaying==700) ?"EMLP":"MLP");
+                Rate_Of_Laying_lbl.Text = sharedDataModel.RateOfLaying.ToString() + " MINES/24 HR CYCLE BY " + ((sharedDataModel.RateOfLaying == 700) ? "EMLP" : "MLP");
                 MLPs_Required_lbl.Text = CalculateMLP() + " Nos";
 
                 // Avaiable Mines 
@@ -127,9 +130,6 @@ namespace DesktopApp.UserControls
                 strips_A_Per_Lbl.Text = CalculateStrips("A_PER");
                 A_tk_strips_lbl.Text = CalculateStrips("A_TK");
                 frag_strips_lbl.Text = CalculateStrips("FRAG");
-
-
-
 
                 UpdateSharedDataModel();
                 //Calculate Min and Max strip
@@ -354,21 +354,22 @@ namespace DesktopApp.UserControls
 
         public void Reset_btn_Click()
         {
-          
-                Resul_panel.Visible = false;
-                frontage_tb.Text = "";
-                A_Pers_tb.Text = "";
-                A_Tk_tb.Text = "";
-                Frag_tb.Text = "";
-                stripAlert_lbl.Visible = false;
-                strips_panel.Visible = false;
-                VSL_tb.Text = "";
-                Inf_safe_Line_tb.Text = "";
-                Depth_tb.Text = "";
-                arms_dropdown.SelectedIndex = -1;
-                sharedDataModel.Reset();
-                OnMineCalculatedClick(EventArgs.Empty);
-           
+
+            Resul_panel.Visible = false;
+            frontage_tb.Text = "";
+            A_Pers_tb.Text = "";
+            A_Tk_tb.Text = "";
+            Frag_tb.Text = "";
+            stripAlert_lbl.Visible = false;
+            strips_panel.Visible = false;
+            VSL_tb.Text = "";
+            Inf_safe_Line_tb.Text = "";
+            Depth_tb.Text = "";
+            arms_dropdown.SelectedIndex = -1;
+            Terrain_Dropdown.SelectedIndex = -1;
+            sharedDataModel.Reset();
+            OnMineCalculatedClick(EventArgs.Empty);
+
 
         }
 
@@ -462,6 +463,24 @@ namespace DesktopApp.UserControls
             {
                 errorProvider.SetError(arms_dropdown, ""); // Clear error message
                 return "NOERROR";                                     // Proceed with your application logic
+            }
+        }
+
+        private void arms_dropdown_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TerrainDropdownCheck();
+        }
+        private string TerrainDropdownCheck()
+        {
+            if (Terrain_Dropdown.SelectedIndex == -1) 
+            {
+                errorProvider.SetError(Terrain_Dropdown, "Please select a value from the dropdown.");
+                return "ERROR";
+            }
+            else
+            {
+                errorProvider.SetError(Terrain_Dropdown, ""); 
+                return "NOERROR";                                    
             }
         }
     }

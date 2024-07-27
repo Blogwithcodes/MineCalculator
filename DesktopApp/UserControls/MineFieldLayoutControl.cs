@@ -15,6 +15,15 @@ using System.Diagnostics;
 using System.Drawing.Printing;
 using System.Drawing.Drawing2D;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Python.Runtime;
+using IronPython.Hosting;
+using IronPython.Modules;
+using IronPython.Runtime;
+using IronPython;
+using Microsoft.Scripting.Hosting;
+using Microsoft.Scripting;
+
+
 
 namespace DesktopApp.UserControls
 {
@@ -689,7 +698,7 @@ namespace DesktopApp.UserControls
         private void AddPanelWithDrawing(Document doc)
         {
             // Create a Panel control and add your drawing to it
-            Panel panel =drawingPanel;
+            Panel panel = drawingPanel;
 
             // Calculate dimensions for A4 size paper (210mm x 297mm)
             float a4WidthInPoints = PageSize.A4.Width; // A4 width in points
@@ -710,7 +719,7 @@ namespace DesktopApp.UserControls
             panel.DrawToBitmap(bitmap, new System.Drawing.Rectangle(0, 0, panel.Width, panel.Height));
 
             // Resize the image while maintaining aspect ratio
-         
+
             Size newSize = ResizeImage(bitmap.Size, maxWidth, maxHeight);
             Bitmap resizedImage = new Bitmap(bitmap, newSize);
 
@@ -836,12 +845,12 @@ namespace DesktopApp.UserControls
 
 
                     // Calculate the position of the new point based on distance and degree
-                    int newX = (int)(startPointx + distance * Math.Cos((degree+270)* Math.PI / 180)); // Convert degree to radians
-                    int newY = (int)(startPointy + distance * Math.Sin((degree+270) * Math.PI / 180)); // Convert degree to radians
+                    int newX = (int)(startPointx + distance * Math.Cos((degree + 270) * Math.PI / 180)); // Convert degree to radians
+                    int newY = (int)(startPointy + distance * Math.Sin((degree + 270) * Math.PI / 180)); // Convert degree to radians
 
                     // Draw a line from the landmark point to the new point
 
-                    g.FillEllipse(Brushes.Blue, newX+ offsetX - 3, newY+ offsetY - 3, 6, 6);
+                    g.FillEllipse(Brushes.Blue, newX + offsetX - 3, newY + offsetY - 3, 6, 6);
 
                     g.DrawLine(Pens.Black, fromPoint, new Point(newX, newY));
 
@@ -883,6 +892,73 @@ namespace DesktopApp.UserControls
                 MessageBox.Show("Something went wrong in creatation of drawing. Please make sure all values are proper", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void Test_Btn_Click_1(object sender, EventArgs e)
+        {
+
+            CallPythonScriptByIronPython();
+
+            // Load the generated HTML file into the WebBrowser control
+            //string htmlFilePath = Path.Combine(Application.StartupPath, "map_with_expanded_boundaries.html");
+            //if (System.IO.File.Exists(htmlFilePath))
+            //{
+            //    webBrowser1.Navigate(htmlFilePath);
+            //}
+            //else
+            //{
+            //    MessageBox.Show("HTML file not found!");
+            //}
+        
+
+
+        }
+
+
+
+        private void CallPythonScriptByIronPython()
+        {
+            try
+            {
+                var engine = IronPython.Hosting.Python.CreateEngine();
+
+                // Get the directory of the Python script
+                string scriptDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+                // Add the directory to the search paths
+                var searchPaths = engine.GetSearchPaths();
+                searchPaths.Add(scriptDirectory);
+                engine.SetSearchPaths(searchPaths);
+
+                // Load and execute the Python script
+                string scriptPath = Path.Combine(scriptDirectory, "maps.py");
+                engine.ExecuteFile(scriptPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error calling Python script: {ex.Message}");
+            }
+        }
+        private void CallPythonScript()
+        {
+            try
+            {
+                Runtime.PythonDLL = @"C:\Program Files\Python312\python312.dll";
+                //// Initialize the Python runtime
+                PythonEngine.Initialize();
+                using (Py.GIL()) // Acquire the GIL (Global Interpreter Lock)
+                {
+                    string scriptDirectory = Path.Combine(Application.StartupPath);
+                    dynamic sys = Py.Import("sys");
+                    sys.path.append(scriptDirectory);
+                    dynamic py = Py.Import("maps.py");
+                    py.generate_map();
+                }
+            }   
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error calling Python script: {ex.Message}");
+            }
+        }
+
     }
 }
 

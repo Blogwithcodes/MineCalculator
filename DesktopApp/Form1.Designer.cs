@@ -37,6 +37,9 @@
             MineLayingCalculation = new Label();
             Run_btn = new Button();
             sidePanel = new Panel();
+            MineFeldReocrdPanel = new Panel();
+            button9 = new Button();
+            pictureBox10 = new PictureBox();
             MineFieldLayout_panel = new Panel();
             button6 = new Button();
             pictureBox9 = new PictureBox();
@@ -70,6 +73,8 @@
             toastTimer = new System.Windows.Forms.Timer(components);
             panel1.SuspendLayout();
             sidePanel.SuspendLayout();
+            MineFeldReocrdPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox10).BeginInit();
             MineFieldLayout_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox9).BeginInit();
             bottomSidePanel.SuspendLayout();
@@ -175,6 +180,7 @@
             // sidePanel
             // 
             sidePanel.BackColor = Color.MintCream;
+            sidePanel.Controls.Add(MineFeldReocrdPanel);
             sidePanel.Controls.Add(MineFieldLayout_panel);
             sidePanel.Controls.Add(bottomSidePanel);
             sidePanel.Controls.Add(ParimeterPanel);
@@ -192,12 +198,51 @@
             sidePanel.Size = new Size(222, 740);
             sidePanel.TabIndex = 1;
             // 
+            // MineFeldReocrdPanel
+            // 
+            MineFeldReocrdPanel.BackColor = Color.Transparent;
+            MineFeldReocrdPanel.Controls.Add(button9);
+            MineFeldReocrdPanel.Controls.Add(pictureBox10);
+            MineFeldReocrdPanel.Location = new Point(3, 503);
+            MineFeldReocrdPanel.Margin = new Padding(3, 4, 3, 4);
+            MineFeldReocrdPanel.Name = "MineFeldReocrdPanel";
+            MineFeldReocrdPanel.Size = new Size(208, 63);
+            MineFeldReocrdPanel.TabIndex = 8;
+            MineFeldReocrdPanel.Visible = false;
+            // 
+            // button9
+            // 
+            button9.BackColor = Color.Transparent;
+            button9.BackgroundImageLayout = ImageLayout.Stretch;
+            button9.FlatAppearance.BorderSize = 0;
+            button9.FlatStyle = FlatStyle.Flat;
+            button9.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold, GraphicsUnit.Point);
+            button9.Location = new Point(56, 0);
+            button9.Margin = new Padding(0);
+            button9.Name = "button9";
+            button9.Size = new Size(150, 59);
+            button9.TabIndex = 1;
+            button9.Text = "Mine Field Record";
+            button9.UseVisualStyleBackColor = false;
+            button9.Click += MineFieldRecord_Click;
+            // 
+            // pictureBox10
+            // 
+            pictureBox10.Image = (Image)resources.GetObject("pictureBox10.Image");
+            pictureBox10.InitialImage = (Image)resources.GetObject("pictureBox10.InitialImage");
+            pictureBox10.Location = new Point(3, 0);
+            pictureBox10.Name = "pictureBox10";
+            pictureBox10.Size = new Size(51, 59);
+            pictureBox10.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox10.TabIndex = 0;
+            pictureBox10.TabStop = false;
+            // 
             // MineFieldLayout_panel
             // 
             MineFieldLayout_panel.BackColor = Color.Transparent;
             MineFieldLayout_panel.Controls.Add(button6);
             MineFieldLayout_panel.Controls.Add(pictureBox9);
-            MineFieldLayout_panel.Location = new Point(7, 503);
+            MineFieldLayout_panel.Location = new Point(2, 574);
             MineFieldLayout_panel.Margin = new Padding(3, 4, 3, 4);
             MineFieldLayout_panel.Name = "MineFieldLayout_panel";
             MineFieldLayout_panel.Size = new Size(208, 63);
@@ -567,7 +612,7 @@
             pictureBox7.InitialImage = (Image)resources.GetObject("pictureBox7.InitialImage");
             pictureBox7.Location = new Point(342, 188);
             pictureBox7.Name = "pictureBox7";
-            pictureBox7.Size = new Size(29, 34);
+            pictureBox7.Size = new Size(222, 34);
             pictureBox7.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox7.TabIndex = 0;
             pictureBox7.TabStop = false;
@@ -595,6 +640,8 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             sidePanel.ResumeLayout(false);
+            MineFeldReocrdPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox10).EndInit();
             MineFieldLayout_panel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox9).EndInit();
             bottomSidePanel.ResumeLayout(false);
@@ -659,5 +706,8 @@
         private Panel MineFieldLayout_panel;
         private Button button6;
         private PictureBox pictureBox9;
+        private Panel MineFeldReocrdPanel;
+        private Button button9;
+        private PictureBox pictureBox10;
     }
 }
