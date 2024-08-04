@@ -22,6 +22,8 @@ using IronPython.Runtime;
 using IronPython;
 using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting;
+using Microsoft.VisualBasic;
+using DesktopApp.HelperClass;
 
 
 
@@ -907,7 +909,7 @@ namespace DesktopApp.UserControls
             //{
             //    MessageBox.Show("HTML file not found!");
             //}
-        
+
 
 
         }
@@ -952,13 +954,95 @@ namespace DesktopApp.UserControls
                     dynamic py = Py.Import("maps.py");
                     py.generate_map();
                 }
-            }   
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error calling Python script: {ex.Message}");
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            string landmarkLatitude = Interaction.InputBox("Enter Landmark Latitude:", "Input Required");
+            string landmarkLongitude = Interaction.InputBox("Enter Landmark Longitude:", "Input Required");
+
+            if (String.IsNullOrEmpty(landmarkLatitude) || string.IsNullOrEmpty(landmarkLongitude))
+            {
+                MessageBox.Show("Please enter Landmark data to export csv");
+                return;
+            }
+            //if (GeoValidator.IsValidLatitude(Convert.ToDouble(landmarkLatitude)))
+            //{
+            //    MessageBox.Show("Please enter valid latitude");
+            //    return;
+            //}
+            //if (GeoValidator.IsValidLatitude(Convert.ToDouble(landmarkLongitude)))
+            //{
+            //    MessageBox.Show("Please enter valid Logngitute");
+            //    return;
+            //}
+
+            // Example data to export
+            var records = new List<ExportCSVModel>();
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (!row.IsNewRow) // Ignore the new row placeholder
+                {
+                    var record = new ExportCSVModel
+                    {
+                        DistanceFrom = Convert.ToString(row.Cells["DistanceFrom"].Value),
+                        DistanceTo = Convert.ToString(row.Cells["DistanceTo"].Value),
+                        Distance = Convert.ToInt32(row.Cells["Distance"].Value),
+                        GRef = Convert.ToString(row.Cells["GRef"].Value),
+                        Bearing = Convert.ToString(row.Cells["Bearing"].Value)
+                    };
+
+                    if(record.DistanceFrom.Contains("Landmark"))
+                    {
+                        record.Latitude = Convert.ToDouble(landmarkLatitude);
+                        record.Longitude = Convert.ToDouble(landmarkLongitude);
+
+                    }
+                    else
+                    {
+                        GeoCalculator.CalculateNextPoint(records[records.Count - 1].Latitude, records[records.Count - 1].Longitude, record.Distance, Convert.ToDouble(record.Bearing));
+                    }
+                    records.Add(record);
+                }
+            }
+
+
+            
+            // Open the SaveFileDialog to let the user choose the output file location
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                saveFileDialog.Title = "Save CSV File";
+                saveFileDialog.FileName = "output.csv";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string outputPath = saveFileDialog.FileName;
+
+                    try
+                    {
+                        Helper.ExportToCsv(records, outputPath);
+                        MessageBox.Show("CSV exported successfully!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error: {ex.Message}");
+                    }
+                }
+
+            }
+        }
+
+        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
 

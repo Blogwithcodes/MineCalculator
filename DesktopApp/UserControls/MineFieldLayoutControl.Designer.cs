@@ -36,7 +36,7 @@
             label6 = new Label();
             drawingPanel = new Panel();
             editPanel = new Panel();
-            Test_Btn = new Button();
+            button1 = new Button();
             button3 = new Button();
             button2 = new Button();
             savebtn = new Button();
@@ -80,6 +80,7 @@
             dataGridView1.RowTemplate.Height = 29;
             dataGridView1.Size = new Size(1057, 214);
             dataGridView1.TabIndex = 4;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;
             // 
             // panel1
             // 
@@ -127,7 +128,7 @@
             // 
             // editPanel
             // 
-            editPanel.Controls.Add(Test_Btn);
+            editPanel.Controls.Add(button1);
             editPanel.Controls.Add(button3);
             editPanel.Controls.Add(button2);
             editPanel.Controls.Add(savebtn);
@@ -146,18 +147,18 @@
             editPanel.Size = new Size(1057, 154);
             editPanel.TabIndex = 5;
             // 
-            // Test_Btn
+            // button1
             // 
-            Test_Btn.BackColor = Color.SkyBlue;
-            Test_Btn.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            Test_Btn.ForeColor = Color.Black;
-            Test_Btn.Location = new Point(687, 106);
-            Test_Btn.Name = "Test_Btn";
-            Test_Btn.Size = new Size(163, 43);
-            Test_Btn.TabIndex = 18;
-            Test_Btn.Text = "Test";
-            Test_Btn.UseVisualStyleBackColor = false;
-            Test_Btn.Click += Test_Btn_Click_1;
+            button1.BackColor = Color.SkyBlue;
+            button1.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            button1.ForeColor = Color.Black;
+            button1.Location = new Point(703, 106);
+            button1.Name = "button1";
+            button1.Size = new Size(163, 43);
+            button1.TabIndex = 18;
+            button1.Text = "Download CSV File";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
             // 
             // button3
             // 
@@ -347,6 +348,6 @@
         private Panel drawingContainerPanel;
         private Panel drawingPanel;
         private Label label6;
-        private Button Test_Btn;
+        private Button button1;
     }
 }

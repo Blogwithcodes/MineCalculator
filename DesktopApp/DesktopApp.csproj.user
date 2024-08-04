@@ -10,6 +10,9 @@
     <Compile Update="UserControls\AccessoriesControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="UserControls\MapControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="UserControls\MineCalculationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -39,7 +42,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Form1.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Update="UserControls\MineCalculationControl.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UserControls\MineFieldLayoutControl.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

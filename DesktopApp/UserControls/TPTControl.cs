@@ -72,7 +72,7 @@ namespace DesktopApp.UserControls
         {
 
             // Calculate the result using the formula
-            double _result = Math.Ceiling(sharedDataModel.M_16_frag / 560);
+            double _result = Math.Ceiling(sharedDataModel.M_16_frag / 700);
 
             return _result.ToString();
         }
@@ -80,7 +80,7 @@ namespace DesktopApp.UserControls
         {
 
             // Calculate the result using the formula
-            double _result = Math.Ceiling(sharedDataModel.Anit_Pers_Mines / 6400);
+            double _result = Math.Ceiling(sharedDataModel.Anit_Pers_Mines /8000);
 
             return _result.ToString();
         }
@@ -88,7 +88,7 @@ namespace DesktopApp.UserControls
         {
 
             // Calculate the result using the formula
-            double _result = Math.Ceiling(sharedDataModel.Anti_Tank_Mines / 180);
+            double _result = Math.Ceiling(sharedDataModel.Anti_Tank_Mines / 225);
 
             return _result.ToString();
         }
