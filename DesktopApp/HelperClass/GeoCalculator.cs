@@ -9,7 +9,8 @@ namespace DesktopApp.HelperClass
 
     public static class GeoCalculator
     {
-        private const double EarthRadius = 6371e3; // Radius of Earth in meters
+        private const double EarthRadius = 6371e3;
+
 
         public static (double newLatitude, double newLongitude) CalculateNextPoint(double currentLatitude, double currentLongitude, double distance, double bearing)
         {
@@ -26,6 +27,9 @@ namespace DesktopApp.HelperClass
             double lon2 = lon1 + Math.Atan2(Math.Sin(brng) * Math.Sin(distance / EarthRadius) * Math.Cos(lat1),
                                             Math.Cos(distance / EarthRadius) - Math.Sin(lat1) * Math.Sin(lat2));
 
+            // Normalize the longitude to be within the range -180 to 180 degrees
+            lon2 = (lon2 + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
+
             // Convert the result from radians to degrees
             double newLatitude = RadiansToDegrees(lat2);
             double newLongitude = RadiansToDegrees(lon2);
@@ -37,6 +41,7 @@ namespace DesktopApp.HelperClass
         {
             return degrees * (Math.PI / 180);
         }
+
         private static double RadiansToDegrees(double radians)
         {
             return radians * (180 / Math.PI);

@@ -24,6 +24,8 @@ using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting;
 using Microsoft.VisualBasic;
 using DesktopApp.HelperClass;
+using PdfSharp.Pdf.Content.Objects;
+using System.Text.RegularExpressions;
 
 
 
@@ -37,6 +39,14 @@ namespace DesktopApp.UserControls
         int RowIndex = -1;
         Dictionary<string, Point> pointsDictionary = new Dictionary<string, Point>();
 
+        //for testing
+        double landmarkLatitude = 30.43;
+        double landmarkLongitude = 40.12;
+
+        //For live
+        //double landmarkLatitude =0;
+        //double landmarkLongitude = 0;
+
         public MineFieldLayoutControl(SharedDataModel _sharedDataModel)
         {
             this.sharedDataModel = _sharedDataModel;
@@ -47,45 +57,93 @@ namespace DesktopApp.UserControls
         }
         public void InitCalculate()
         {
-            AddDropDownOptions();
+            AddDropDownOptionsForDistanceFrom();
 
             //TESTING PURPUSE 
-            distanceFrom_dropdown.SelectedIndex = 1;
-            distanceTo_dropdown.SelectedIndex = 2;
-            distance_tb.Text = "100";
-            grOf_tb.Text = "ssm1";
-            Bearing_tb.Text = "100";
+            //distanceFrom_dropdown.SelectedIndex = 0;
+            //distanceTo_dropdown.SelectedIndex = 1;
+            //distance_tb.Text = "100";
+            //Bearing_tb.Text = "100";
 
 
         }
 
-        private void AddDropDownOptions()
+        private void AddDropDownOptionsForDistanceTo()
         {
+            if (distanceFrom_dropdown.Text == "Landmark")
+            {
+
+                distanceTo_dropdown.Items.Clear();
+                //Add SSM 
+                for (int i = 0; i < sharedDataModel.Assumed_strips; i++)
+                {
+                    distanceTo_dropdown.Items.Add("SSM_" + (i + 1));
+                }
+                //Add Point  
+                for (int i = 0; i < 4; i++)
+                {
+                    distanceTo_dropdown.Items.Add("P_" + (i + 1));
+                }
+
+
+            }
+            if (distanceFrom_dropdown.Text.Contains("SSM"))
+            {
+
+                distanceTo_dropdown.Items.Clear();
+
+                // Fetch Index
+                int index = int.Parse(distanceFrom_dropdown.Text.Split('_')[1]);
+                // Add ESM
+                distanceTo_dropdown.Items.Add("ESM_" + index);
+                distanceTo_dropdown.Items.Add("TP_" + 1 + ((char)('a' + (index - 1))));
+
+            }
+            if (distanceFrom_dropdown.Text.Contains("TP_"))
+            {
+                distanceTo_dropdown.Items.Clear();
+                // Fetch Index
+                char postfix = distanceFrom_dropdown.Text[distanceFrom_dropdown.Text.Length - 1];
+
+                Match match = Regex.Match(distanceFrom_dropdown.Text, @"\d+");
+                int currentIndex = 0;
+                if (match.Success)
+                {
+                    currentIndex = int.Parse(match.Value);
+                }
+
+                distanceTo_dropdown.Items.Add("TP_" + (currentIndex + 1) + postfix);
+
+                distanceTo_dropdown.Items.Add("ESM_" + (postfix - 'a' + 1));
+            }
+        }
+        private void AddDropDownOptionsForDistanceFrom()
+        {
+
+
             //Remove Items if present 
             distanceFrom_dropdown.Items.Clear();
-            distanceTo_dropdown.Items.Clear();
-            // Add LandMark 
-            distanceFrom_dropdown.Items.Add("Landmark");
-            distanceTo_dropdown.Items.Add("Landmark");
 
-            //Add SSM 
-            for (int i = 0; i < sharedDataModel.Assumed_strips; i++)
+            // Adding data in distance from
+            distanceFrom_dropdown.Items.Add("Landmark");
+
+
+            // Get all the points from dataGrid distance to 
+            foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                distanceFrom_dropdown.Items.Add("SSM_" + (i + 1));
-                distanceTo_dropdown.Items.Add("SSM_" + (i + 1));
+                if (row.Cells["DistanceTo"].Value != null)
+                {
+                    if (!row.Cells["DistanceTo"].Value.ToString().Contains("ESM") && !row.Cells["DistanceTo"].Value.ToString().Contains("P_"))
+                    {
+                        distanceFrom_dropdown.Items.Add(row.Cells["DistanceTo"].Value);
+                    }
+                }
             }
-            //Add ESM 
-            for (int i = 0; i < sharedDataModel.Assumed_strips; i++)
-            {
-                distanceFrom_dropdown.Items.Add("ESM_" + (i + 1));
-                distanceTo_dropdown.Items.Add("ESM_" + (i + 1));
-            }
-            //Add TP
-            for (int i = 0; i < 10; i++)
-            {
-                distanceFrom_dropdown.Items.Add("TP_" + (i + 1));
-                distanceTo_dropdown.Items.Add("TP_" + (i + 1));
-            }
+
+
+
+
+
         }
         private void InitializeDataGridView()
         {
@@ -110,17 +168,24 @@ namespace DesktopApp.UserControls
             column3.Name = "Distance";
             column3.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridView1.Columns.Add(column3);
+
             DataGridViewTextBoxColumn column4 = new DataGridViewTextBoxColumn();
-            column4.HeaderText = "G Ref ";
-            column4.Name = "GRef";
+            column4.HeaderText = "Bearing";
+            column4.Name = "Bearing";
             column4.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridView1.Columns.Add(column4);
 
             DataGridViewTextBoxColumn column5 = new DataGridViewTextBoxColumn();
-            column5.HeaderText = "Bearing";
-            column5.Name = "Bearing";
+            column5.HeaderText = "Latitude";
+            column5.Name = "Latitude";
             column5.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridView1.Columns.Add(column5);
+
+            DataGridViewTextBoxColumn column6 = new DataGridViewTextBoxColumn();
+            column6.HeaderText = "Longitude ";
+            column6.Name = "Longitude";
+            column6.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridView1.Columns.Add(column6);
 
 
             DataGridViewButtonColumn editColumn = new DataGridViewButtonColumn();
@@ -222,12 +287,9 @@ namespace DesktopApp.UserControls
                     }
                     if (i == 3)
                     {
-                        rowData.GRef = row.Cells[i].Value.ToString();
-                    }
-                    if (i == 4)
-                    {
                         rowData.Bearing = row.Cells[i].Value.ToString();
                     }
+                    
                 }
 
                 return rowData;
@@ -240,7 +302,6 @@ namespace DesktopApp.UserControls
             distanceFrom_dropdown.Text = rowdata.DistanceFrom;
             distanceTo_dropdown.Text = rowdata.DistanceTo;
             distance_tb.Text = rowdata.Distance;
-            grOf_tb.Text = rowdata.GRef;
             Bearing_tb.Text = rowdata.Bearing;
 
             ToggleEditMode(true);
@@ -279,13 +340,16 @@ namespace DesktopApp.UserControls
         {
             string ValidityResponse = ValidateData();
 
+
+
             if (ValidityResponse != "NOERROR")
             {
                 SetErrorProviderComboBox(distanceTo_dropdown);
                 SetErrorProviderComboBox(distanceFrom_dropdown);
                 SetErrorProviderTextBox(distance_tb);
-                SetErrorProviderTextBox(grOf_tb, false);
                 SetErrorProviderTextBox(Bearing_tb);
+                SetErrorProviderTextBox(Latitude_tb);
+                SetErrorProviderTextBox(Longitude_tb);
 
 
                 MessageBox.Show(ValidityResponse, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -296,7 +360,7 @@ namespace DesktopApp.UserControls
             if (!IsEditMode)
             {
                 //Add data to datagrid 
-                string[] rowData = { distanceFrom_dropdown.Text, distanceTo_dropdown.Text, distance_tb.Text, grOf_tb.Text, Bearing_tb.Text };
+                string[] rowData = { distanceFrom_dropdown.Text, distanceTo_dropdown.Text, distance_tb.Text, Bearing_tb.Text, Latitude_tb.Text, Longitude_tb.Text };
                 // Add a new row to the DataGridView and set its values
                 dataGridView1.Rows.Add(rowData);
             }
@@ -335,13 +399,18 @@ namespace DesktopApp.UserControls
                     {
                         row.Cells[i].Value = distance_tb.Text;
                     }
+
                     if (i == 3)
                     {
-                        row.Cells[i].Value = grOf_tb.Text;
+                        row.Cells[i].Value = Bearing_tb.Text;
                     }
                     if (i == 4)
                     {
-                        row.Cells[i].Value = Bearing_tb.Text;
+                        row.Cells[i].Value = Latitude_tb.Text;
+                    }
+                    if (i == 5)
+                    {
+                        row.Cells[i].Value = Longitude_tb.Text;
                     }
                 }
             }
@@ -369,11 +438,7 @@ namespace DesktopApp.UserControls
 
                 return "Please enter valid data";
             }
-            if (SetErrorProviderTextBox(grOf_tb, false) == "ERROR")
-            {
 
-                return "Please enter valid data";
-            }
             if (SetErrorProviderTextBox(Bearing_tb) == "ERROR")
             {
 
@@ -410,7 +475,6 @@ namespace DesktopApp.UserControls
             errorProvider.SetError(distanceFrom_dropdown, "");
             errorProvider.SetError(distanceTo_dropdown, "");
             errorProvider.SetError(distance_tb, "");
-            errorProvider.SetError(grOf_tb, "");
             errorProvider.SetError(Bearing_tb, "");
         }
         private string SetErrorProviderTextBox(TextBox textBox, bool checkdouble = true)
@@ -452,33 +516,60 @@ namespace DesktopApp.UserControls
         {
             TextBox textBox = (TextBox)sender;
             SetErrorProviderTextBox(textBox);
+            CalculateLatAndLong();
         }
 
-        private void grOf_tb_TextChanged(object sender, EventArgs e)
-        {
-            TextBox textBox = (TextBox)sender;
-            SetErrorProviderTextBox(textBox, false);
-        }
+
 
         private void Bearing_tb_TextChanged(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
             SetErrorProviderTextBox(textBox);
+            CalculateLatAndLong();
         }
 
         private void distanceFrom_dropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //ComboBox textBox = (ComboBox)sender;
-            //if (SetErrorProviderComboBox(textBox) == "NOERROR")
-            //{
-            //    grOf_tb.Text = distanceFrom_dropdown.Text;
-            //}
+            try
+            {
+                AddDropDownOptionsForDistanceTo();
+                if (distanceFrom_dropdown.Text == "Landmark")
+                {
+                    if (
+                            (this.landmarkLatitude != 0 && string.IsNullOrEmpty(this.landmarkLatitude.ToString())) ||
+                            (this.landmarkLongitude! != 0 || string.IsNullOrEmpty(this.landmarkLongitude.ToString()))
+                            )
+                    {
+                        return;
+                    }
+                    var coordinates = GetCoordinatesByDistanceFrom("Landmark");
+                    if (!coordinates.HasValue)
+                    {
+                        this.landmarkLatitude = Convert.ToDouble(Interaction.InputBox("Enter Landmark Latitude:", "Input Required"));
+                        this.landmarkLongitude = Convert.ToDouble(Interaction.InputBox("Enter Landmark Longitude:", "Input Required"));
+
+                        if (String.IsNullOrEmpty(this.landmarkLatitude.ToString()) || string.IsNullOrEmpty(this.landmarkLongitude.ToString()))
+                        {
+                            MessageBox.Show("Please enter valid Landmark coordinates");
+                            distanceFrom_dropdown.SelectedIndex = -1;
+                            return;
+                        }
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void distanceTo_dropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox textBox = (ComboBox)sender;
             SetErrorProviderComboBox(textBox);
+            CalculateLatAndLong();
         }
 
         private void Cancel_Click(object sender, EventArgs e)
@@ -504,8 +595,10 @@ namespace DesktopApp.UserControls
             distanceFrom_dropdown.SelectedIndex = -1;
             distanceTo_dropdown.SelectedIndex = -1;
             distance_tb.Text = "";
-            grOf_tb.Text = "";
             Bearing_tb.Text = "";
+            Latitude_tb.Text = "";
+            Longitude_tb.Text = "";
+            AddDropDownOptionsForDistanceFrom();
         }
 
         public void Reset_btn_Click()
@@ -806,6 +899,8 @@ namespace DesktopApp.UserControls
         private void drawMarks(ref Graphics g, int landmarkx, int landmarky)
         {
 
+            //Flag to check row contians app four boundary points 
+            Dictionary<string, Point> checkBoundryPoints = new Dictionary<string, Point>(); 
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 // Get the distance, degree, and point name from the DataGridView
@@ -851,10 +946,20 @@ namespace DesktopApp.UserControls
                     int newY = (int)(startPointy + distance * Math.Sin((degree + 270) * Math.PI / 180)); // Convert degree to radians
 
                     // Draw a line from the landmark point to the new point
+                    if (distanceTo.StartsWith("P_"))
+                    {
+                        g.FillEllipse(Brushes.Red, newX + offsetX - 3, newY + offsetY - 3, 6, 6);
 
-                    g.FillEllipse(Brushes.Blue, newX + offsetX - 3, newY + offsetY - 3, 6, 6);
+                        g.DrawLine(Pens.SandyBrown, fromPoint, new Point(newX, newY));
 
-                    g.DrawLine(Pens.Black, fromPoint, new Point(newX, newY));
+                    }
+                    else
+                    {
+                        g.FillEllipse(Brushes.Blue, newX + offsetX - 3, newY + offsetY - 3, 6, 6);
+
+                        g.DrawLine(Pens.Black, fromPoint, new Point(newX, newY));
+
+                    }
 
                     // Add the new point to the dictionary
                     if (!pointsDictionary.ContainsKey(distanceTo))
@@ -862,11 +967,144 @@ namespace DesktopApp.UserControls
                         Point newPoint = new Point(newX, newY);
                         pointsDictionary.Add(distanceTo, newPoint);
                     }
+                    if (distanceTo.StartsWith("P_"))
+                    {
+                        if(!checkBoundryPoints.ContainsKey(distanceTo))
+                        {
+                            checkBoundryPoints.Add(distanceTo, pointsDictionary[distanceTo]);
+                        }
+                    }
                 }
-
+                
+               
             }
+            drawBoundary(ref g, ref checkBoundryPoints);
+
+            foreach (var kvp in pointsDictionary)
+            {
+                DrawLabel(g, kvp.Key, kvp.Value);
+            }
+        }
+
+        private void DrawLabel(Graphics g, string label, System.Drawing.Point location)
+        {
+            System.Drawing.Font labelFont = new System.Drawing.Font("Arial", 8);
+            Brush labelBrush = Brushes.Black;
+            g.DrawString(label, labelFont, labelBrush, location.X + 5, location.Y - 10); // Adjust the position to avoid overlapping with the point
+        }
+        private void drawBoundary(ref Graphics g,ref Dictionary<string, Point> checkBoundryPoints)
+        {
+            int amplitude = 10;
+            int frequency = 30;
+
+            if (checkBoundryPoints.Count != 0)
+            {
+                if (checkBoundryPoints.ContainsKey("P_1") &&checkBoundryPoints.ContainsKey("P_2") )
+                {
+
+                    DrawHorizontalZigZagLine(ref g, checkBoundryPoints["P_1"], checkBoundryPoints["P_2"], amplitude, frequency);
+                  
+                }
+                if (checkBoundryPoints.ContainsKey("P_2") &&checkBoundryPoints.ContainsKey("P_3") )
+                {
+
+
+                    DrawVerticalZigZagLine(ref g, checkBoundryPoints["P_2"], checkBoundryPoints["P_3"], amplitude, frequency);
+
+                }
+                if (checkBoundryPoints.ContainsKey("P_3") &&checkBoundryPoints.ContainsKey("P_4") )
+                {
+
+                    DrawHorizontalZigZagLine(ref g, checkBoundryPoints["P_3"], checkBoundryPoints["P_4"], amplitude, frequency);
+
+                }
+                if (checkBoundryPoints.ContainsKey("P_4") &&checkBoundryPoints.ContainsKey("P_1") )
+                {
+                    DrawVerticalZigZagLine(ref g, checkBoundryPoints["P_4"], checkBoundryPoints["P_1"], amplitude, frequency);
+                }
+            }
+             
 
         }
+
+        private void DrawVerticalZigZagLine(ref Graphics g, Point start, Point end, int amplitude, int frequency)
+        {
+            // Calculate the total distance between start and end points
+            double totalDistance = Math.Sqrt(Math.Pow(end.X - start.X, 2) + Math.Pow(end.Y - start.Y, 2));
+
+            // Calculate the number of segments in the zig-zag pattern
+            int segments = (int)(totalDistance / frequency);
+
+            // Calculate the delta x and y per segment
+            double deltaX = (end.X - start.X) / (double)segments;
+            double deltaY = (end.Y - start.Y) / (double)segments;
+
+            Point currentPoint = start;
+            bool upward = true;
+
+            for (int i = 1; i <= segments; i++)
+            {
+                double offsetX = i * deltaX;
+                double offsetY = i * deltaY;
+
+                Point nextPoint;
+                if (i % 2 == 0) // Alternate the direction
+                {
+                    nextPoint = new Point((int)(start.X + offsetX - amplitude), (int)(start.Y + offsetY));
+                }
+                else
+                {
+                    nextPoint = new Point((int)(start.X + offsetX + amplitude), (int)(start.Y + offsetY));
+                }
+
+                g.DrawLine(Pens.Green, currentPoint, nextPoint);
+                currentPoint = nextPoint;
+            }
+
+            // Draw the last segment to the end point
+            g.DrawLine(Pens.Green, currentPoint, end);
+        }
+
+        private void DrawHorizontalZigZagLine(ref Graphics g, Point start, Point end, int amplitude, int frequency)
+        {
+            // Calculate the total distance between start and end points
+            double totalDistance = Math.Sqrt(Math.Pow(end.X - start.X, 2) + Math.Pow(end.Y - start.Y, 2));
+
+            // Calculate the number of segments in the zig-zag pattern
+            int segments = (int)(totalDistance / frequency);
+
+            // Calculate the delta x and y per segment
+            double deltaX = (end.X - start.X) / (double)segments;
+            double deltaY = (end.Y - start.Y) / (double)segments;
+
+            Point currentPoint = start;
+            bool upward = true;
+
+            for (int i = 1; i <= segments; i++)
+            {
+                double offsetX = i * deltaX;
+                double offsetY = i * deltaY;
+
+                Point nextPoint;
+                if (upward)
+                {
+                    nextPoint = new Point((int)(start.X + offsetX), (int)(start.Y + offsetY - amplitude));
+                }
+                else
+                {
+                    nextPoint = new Point((int)(start.X + offsetX), (int)(start.Y + offsetY + amplitude));
+                }
+
+                g.DrawLine(Pens.Green, currentPoint, nextPoint);
+                currentPoint = nextPoint;
+                upward = !upward;
+            }
+
+            // Draw the last segment to the end point
+            g.DrawLine(Pens.Green, currentPoint, end);
+        }
+
+
 
         private void drawPoint(ref Graphics g, int landmarkx, int landmarky)
         {
@@ -964,27 +1202,12 @@ namespace DesktopApp.UserControls
         private void button1_Click(object sender, EventArgs e)
         {
 
-            string landmarkLatitude = Interaction.InputBox("Enter Landmark Latitude:", "Input Required");
-            string landmarkLongitude = Interaction.InputBox("Enter Landmark Longitude:", "Input Required");
-
-            if (String.IsNullOrEmpty(landmarkLatitude) || string.IsNullOrEmpty(landmarkLongitude))
-            {
-                MessageBox.Show("Please enter Landmark data to export csv");
-                return;
-            }
-            //if (GeoValidator.IsValidLatitude(Convert.ToDouble(landmarkLatitude)))
-            //{
-            //    MessageBox.Show("Please enter valid latitude");
-            //    return;
-            //}
-            //if (GeoValidator.IsValidLatitude(Convert.ToDouble(landmarkLongitude)))
-            //{
-            //    MessageBox.Show("Please enter valid Logngitute");
-            //    return;
-            //}
-
             // Example data to export
             var records = new List<ExportCSVModel>();
+            if (dataGridView1.Rows.Count == 0)
+            {
+                MessageBox.Show("Please enter some data in Table first");
+            }
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 if (!row.IsNewRow) // Ignore the new row placeholder
@@ -994,26 +1217,16 @@ namespace DesktopApp.UserControls
                         DistanceFrom = Convert.ToString(row.Cells["DistanceFrom"].Value),
                         DistanceTo = Convert.ToString(row.Cells["DistanceTo"].Value),
                         Distance = Convert.ToInt32(row.Cells["Distance"].Value),
-                        GRef = Convert.ToString(row.Cells["GRef"].Value),
-                        Bearing = Convert.ToString(row.Cells["Bearing"].Value)
+                        Bearing = Convert.ToString(row.Cells["Bearing"].Value),
+                        Latitude = Convert.ToDouble(row.Cells["Latitude"].Value),
+                        Longitude = Convert.ToDouble(row.Cells["Longitude"].Value),
                     };
-
-                    if(record.DistanceFrom.Contains("Landmark"))
-                    {
-                        record.Latitude = Convert.ToDouble(landmarkLatitude);
-                        record.Longitude = Convert.ToDouble(landmarkLongitude);
-
-                    }
-                    else
-                    {
-                        GeoCalculator.CalculateNextPoint(records[records.Count - 1].Latitude, records[records.Count - 1].Longitude, record.Distance, Convert.ToDouble(record.Bearing));
-                    }
                     records.Add(record);
                 }
             }
 
 
-            
+
             // Open the SaveFileDialog to let the user choose the output file location
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
@@ -1042,6 +1255,84 @@ namespace DesktopApp.UserControls
         private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void CalculateLatAndLong()
+        {
+            if (
+                string.IsNullOrEmpty(distanceFrom_dropdown.Text) ||
+                string.IsNullOrEmpty(distanceTo_dropdown.Text) ||
+                string.IsNullOrEmpty(Bearing_tb.Text) ||
+                string.IsNullOrEmpty(distance_tb.Text)
+                )
+            {
+                return;
+            }
+            if (!distanceFrom_dropdown.Text.Contains("Landmark"))
+            {
+                var coordianates = GetCoordinatesByDistanceFrom(distanceFrom_dropdown.Text);
+                if (coordianates.HasValue)
+                {
+                    var newCoordinates = GeoCalculator.CalculateNextPoint(coordianates.Value.Latitude, coordianates.Value.Longitude, Convert.ToDouble(distance_tb.Text), Convert.ToDouble(Bearing_tb.Text));
+                    Latitude_tb.Text = newCoordinates.newLatitude.ToString();
+                    Longitude_tb.Text = newCoordinates.newLongitude.ToString();
+                }
+            }
+            else
+            {
+                var newCoordinates = GeoCalculator.CalculateNextPoint(this.landmarkLatitude, this.landmarkLongitude, Convert.ToDouble(distance_tb.Text), Convert.ToDouble(Bearing_tb.Text));
+                Latitude_tb.Text = newCoordinates.newLatitude.ToString();
+                Longitude_tb.Text = newCoordinates.newLongitude.ToString();
+            }
+
+        }
+        public (double Latitude, double Longitude)? GetCoordinatesByDistanceFrom(string distanceFrom)
+        {
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (!row.IsNewRow) // Ignore the new row placeholder
+                {
+                    var distance = row.Cells["DistanceTo"].Value;
+                    if (distanceFrom.Contains(distance.ToString()))
+                    {
+                        var latitude = Convert.ToDouble(row.Cells["Latitude"].Value);
+                        var longitude = Convert.ToDouble(row.Cells["Longitude"].Value);
+                        return (latitude, longitude);
+                    }
+                }
+            }
+            return null;
+        }
+
+        private void Latitude_tb_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void Import_btn_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                openFileDialog.Title = "Select a CSV file";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName;
+                    DataTable dataTable = Helper.ReadCsvFile(filePath);
+
+                    dataGridView1.Rows.Clear();
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                       
+                        //Add data to datagrid 
+                        string[] rowData = { row.ItemArray[0].ToString(), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(), row.ItemArray[3].ToString(), row.ItemArray[4].ToString(), row.ItemArray[5].ToString() };
+                        // Add a new row to the DataGridView and set its values
+                        dataGridView1.Rows.Add(rowData);
+                    }
+                   
+                }
+                DatGridChange();
+            }
         }
     }
 }

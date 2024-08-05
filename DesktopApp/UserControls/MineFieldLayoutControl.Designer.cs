@@ -36,21 +36,24 @@
             label6 = new Label();
             drawingPanel = new Panel();
             editPanel = new Panel();
+            Longitude_tb = new TextBox();
+            Latitude_tb = new TextBox();
+            label8 = new Label();
+            label7 = new Label();
             button1 = new Button();
             button3 = new Button();
             button2 = new Button();
             savebtn = new Button();
-            grOf_tb = new TextBox();
             Bearing_tb = new TextBox();
             distance_tb = new TextBox();
             distanceTo_dropdown = new ComboBox();
             distanceFrom_dropdown = new ComboBox();
             label5 = new Label();
-            label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             woodenPeg = new Label();
             errorProvider = new ErrorProvider(components);
+            Import_btn = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             panel1.SuspendLayout();
             drawingContainerPanel.SuspendLayout();
@@ -90,7 +93,7 @@
             panel1.Controls.Add(dataGridView1);
             panel1.Location = new Point(26, 52);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1111, 831);
+            panel1.Size = new Size(1127, 831);
             panel1.TabIndex = 5;
             // 
             // drawingContainerPanel
@@ -100,7 +103,7 @@
             drawingContainerPanel.Controls.Add(drawingPanel);
             drawingContainerPanel.Location = new Point(17, 383);
             drawingContainerPanel.Name = "drawingContainerPanel";
-            drawingContainerPanel.Size = new Size(1069, 445);
+            drawingContainerPanel.Size = new Size(1085, 445);
             drawingContainerPanel.TabIndex = 18;
             // 
             // label6
@@ -122,41 +125,82 @@
             drawingPanel.BackColor = Color.LightSkyBlue;
             drawingPanel.Location = new Point(12, 37);
             drawingPanel.Name = "drawingPanel";
-            drawingPanel.Size = new Size(728, 405);
+            drawingPanel.Size = new Size(744, 405);
             drawingPanel.TabIndex = 0;
             drawingPanel.Paint += DrawingPanel_Paint;
             // 
             // editPanel
             // 
+            editPanel.Controls.Add(Import_btn);
+            editPanel.Controls.Add(Longitude_tb);
+            editPanel.Controls.Add(Latitude_tb);
+            editPanel.Controls.Add(label8);
+            editPanel.Controls.Add(label7);
             editPanel.Controls.Add(button1);
             editPanel.Controls.Add(button3);
             editPanel.Controls.Add(button2);
             editPanel.Controls.Add(savebtn);
-            editPanel.Controls.Add(grOf_tb);
             editPanel.Controls.Add(Bearing_tb);
             editPanel.Controls.Add(distance_tb);
             editPanel.Controls.Add(distanceTo_dropdown);
             editPanel.Controls.Add(distanceFrom_dropdown);
             editPanel.Controls.Add(label5);
-            editPanel.Controls.Add(label4);
             editPanel.Controls.Add(label3);
             editPanel.Controls.Add(label2);
             editPanel.Controls.Add(woodenPeg);
-            editPanel.Location = new Point(17, 3);
+            editPanel.Location = new Point(3, 3);
             editPanel.Name = "editPanel";
-            editPanel.Size = new Size(1057, 154);
+            editPanel.Size = new Size(1127, 154);
             editPanel.TabIndex = 5;
+            // 
+            // Longitude_tb
+            // 
+            Longitude_tb.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            Longitude_tb.Location = new Point(684, 57);
+            Longitude_tb.Name = "Longitude_tb";
+            Longitude_tb.Size = new Size(147, 30);
+            Longitude_tb.TabIndex = 22;
+            // 
+            // Latitude_tb
+            // 
+            Latitude_tb.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            Latitude_tb.Location = new Point(427, 57);
+            Latitude_tb.Name = "Latitude_tb";
+            Latitude_tb.Size = new Size(147, 30);
+            Latitude_tb.TabIndex = 21;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Arial", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            label8.Location = new Point(581, 61);
+            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(104, 22);
+            label8.TabIndex = 20;
+            label8.Text = "Longitude";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Arial", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            label7.Location = new Point(300, 61);
+            label7.Margin = new Padding(4, 0, 4, 0);
+            label7.Name = "label7";
+            label7.Size = new Size(85, 22);
+            label7.TabIndex = 19;
+            label7.Text = "Latitude";
             // 
             // button1
             // 
             button1.BackColor = Color.SkyBlue;
             button1.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             button1.ForeColor = Color.Black;
-            button1.Location = new Point(703, 106);
+            button1.Location = new Point(581, 106);
             button1.Name = "button1";
             button1.Size = new Size(163, 43);
             button1.TabIndex = 18;
-            button1.Text = "Download CSV File";
+            button1.Text = "Export CSV Table";
             button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
@@ -165,11 +209,11 @@
             button3.BackColor = Color.SkyBlue;
             button3.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             button3.ForeColor = Color.Black;
-            button3.Location = new Point(872, 106);
+            button3.Location = new Point(936, 106);
             button3.Name = "button3";
             button3.Size = new Size(163, 43);
             button3.TabIndex = 17;
-            button3.Text = "Download";
+            button3.Text = "Download Diagram";
             button3.UseVisualStyleBackColor = false;
             button3.Click += Download_Click;
             // 
@@ -199,19 +243,10 @@
             savebtn.UseVisualStyleBackColor = false;
             savebtn.Click += Save_Click;
             // 
-            // grOf_tb
-            // 
-            grOf_tb.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            grOf_tb.Location = new Point(165, 53);
-            grOf_tb.Name = "grOf_tb";
-            grOf_tb.Size = new Size(147, 30);
-            grOf_tb.TabIndex = 13;
-            grOf_tb.TextChanged += grOf_tb_TextChanged;
-            // 
             // Bearing_tb
             // 
             Bearing_tb.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            Bearing_tb.Location = new Point(507, 53);
+            Bearing_tb.Location = new Point(146, 57);
             Bearing_tb.Name = "Bearing_tb";
             Bearing_tb.Size = new Size(147, 30);
             Bearing_tb.TabIndex = 12;
@@ -220,7 +255,7 @@
             // distance_tb
             // 
             distance_tb.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            distance_tb.Location = new Point(836, 11);
+            distance_tb.Location = new Point(684, 13);
             distance_tb.Name = "distance_tb";
             distance_tb.Size = new Size(147, 30);
             distance_tb.TabIndex = 11;
@@ -230,7 +265,7 @@
             // 
             distanceTo_dropdown.DropDownStyle = ComboBoxStyle.DropDownList;
             distanceTo_dropdown.FormattingEnabled = true;
-            distanceTo_dropdown.Location = new Point(507, 13);
+            distanceTo_dropdown.Location = new Point(427, 9);
             distanceTo_dropdown.Name = "distanceTo_dropdown";
             distanceTo_dropdown.Size = new Size(147, 28);
             distanceTo_dropdown.TabIndex = 10;
@@ -240,7 +275,7 @@
             // 
             distanceFrom_dropdown.DropDownStyle = ComboBoxStyle.DropDownList;
             distanceFrom_dropdown.FormattingEnabled = true;
-            distanceFrom_dropdown.Location = new Point(165, 13);
+            distanceFrom_dropdown.Location = new Point(146, 13);
             distanceFrom_dropdown.Name = "distanceFrom_dropdown";
             distanceFrom_dropdown.Size = new Size(147, 28);
             distanceFrom_dropdown.TabIndex = 9;
@@ -250,29 +285,18 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Arial", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            label5.Location = new Point(376, 57);
+            label5.Location = new Point(4, 61);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(83, 22);
             label5.TabIndex = 8;
             label5.Text = "Bearing";
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Arial", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            label4.Location = new Point(19, 57);
-            label4.Margin = new Padding(4, 0, 4, 0);
-            label4.Name = "label4";
-            label4.Size = new Size(110, 22);
-            label4.TabIndex = 7;
-            label4.Text = "GR of ____";
-            // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Arial", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(733, 15);
+            label3.Location = new Point(581, 15);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(96, 22);
@@ -283,7 +307,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Arial", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(376, 15);
+            label2.Location = new Point(300, 15);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(120, 22);
@@ -294,7 +318,7 @@
             // 
             woodenPeg.AutoSize = true;
             woodenPeg.Font = new Font("Arial", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            woodenPeg.Location = new Point(19, 15);
+            woodenPeg.Location = new Point(0, 15);
             woodenPeg.Margin = new Padding(4, 0, 4, 0);
             woodenPeg.Name = "woodenPeg";
             woodenPeg.Size = new Size(139, 22);
@@ -304,6 +328,19 @@
             // errorProvider
             // 
             errorProvider.ContainerControl = this;
+            // 
+            // Import_btn
+            // 
+            Import_btn.BackColor = Color.SkyBlue;
+            Import_btn.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            Import_btn.ForeColor = Color.Black;
+            Import_btn.Location = new Point(750, 106);
+            Import_btn.Name = "Import_btn";
+            Import_btn.Size = new Size(163, 43);
+            Import_btn.TabIndex = 23;
+            Import_btn.Text = "Import CSV Table";
+            Import_btn.UseVisualStyleBackColor = false;
+            Import_btn.Click += Import_btn_Click;
             // 
             // MineFieldLayoutControl
             // 
@@ -334,12 +371,10 @@
         private ComboBox distanceTo_dropdown;
         private ComboBox distanceFrom_dropdown;
         private Label label5;
-        private Label label4;
         private Label label3;
         private Label label2;
         private Label woodenPeg;
         private Button savebtn;
-        private TextBox grOf_tb;
         private TextBox Bearing_tb;
         private TextBox distance_tb;
         private ErrorProvider errorProvider;
@@ -349,5 +384,10 @@
         private Panel drawingPanel;
         private Label label6;
         private Button button1;
+        private Label label8;
+        private Label label7;
+        private TextBox Longitude_tb;
+        private TextBox Latitude_tb;
+        private Button Import_btn;
     }
 }
