@@ -40,12 +40,12 @@ namespace DesktopApp.UserControls
         Dictionary<string, Point> pointsDictionary = new Dictionary<string, Point>();
 
         //for testing
-        double landmarkLatitude = 30.43;
-        double landmarkLongitude = 40.12;
+        //double landmarkLatitude = 30.43;
+        //double landmarkLongitude = 40.12;
 
         //For live
-        //double landmarkLatitude =0;
-        //double landmarkLongitude = 0;
+        double landmarkLatitude = 0;
+        double landmarkLongitude = 0;
 
         public MineFieldLayoutControl(SharedDataModel _sharedDataModel)
         {
