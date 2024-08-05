@@ -1320,7 +1320,7 @@ namespace DesktopApp.UserControls
                     string filePath = openFileDialog.FileName;
                     DataTable dataTable = Helper.ReadCsvFile(filePath);
 
-                    dataGridView1.Rows.Clear();
+                    //dataGridView1.Rows.Clear();
                     foreach (DataRow row in dataTable.Rows)
                     {
                        
