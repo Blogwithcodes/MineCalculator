@@ -133,7 +133,7 @@ namespace DesktopApp.UserControls
             {
                 if (row.Cells["DistanceTo"].Value != null)
                 {
-                    if (!row.Cells["DistanceTo"].Value.ToString().Contains("ESM") && !row.Cells["DistanceTo"].Value.ToString().Contains("P_"))
+                    if (!row.Cells["DistanceTo"].Value.ToString().Contains("ESM") && !row.Cells["DistanceTo"].Value.ToString().StartsWith("P_"))
                     {
                         distanceFrom_dropdown.Items.Add(row.Cells["DistanceTo"].Value);
                     }
