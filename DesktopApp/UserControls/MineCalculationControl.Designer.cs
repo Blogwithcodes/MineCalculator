@@ -78,8 +78,10 @@ namespace DesktopApp.UserControls
             label28 = new Label();
             label29 = new Label();
             panel6 = new Panel();
+            label31 = new Label();
+            ND_Mk_3_lbl = new Label();
+            ND_Mk_1_tb = new TextBox();
             M_16_frag_lbl = new Label();
-            ND_Mk_1_lbl = new Label();
             Nmm_14_lbl = new Label();
             label6 = new Label();
             panel4 = new Panel();
@@ -521,8 +523,10 @@ namespace DesktopApp.UserControls
             // 
             panel6.BackColor = Color.WhiteSmoke;
             panel6.BorderStyle = BorderStyle.Fixed3D;
+            panel6.Controls.Add(label31);
+            panel6.Controls.Add(ND_Mk_3_lbl);
+            panel6.Controls.Add(ND_Mk_1_tb);
             panel6.Controls.Add(M_16_frag_lbl);
-            panel6.Controls.Add(ND_Mk_1_lbl);
             panel6.Controls.Add(Nmm_14_lbl);
             panel6.Controls.Add(label6);
             panel6.Controls.Add(label7);
@@ -534,6 +538,35 @@ namespace DesktopApp.UserControls
             panel6.Size = new Size(452, 145);
             panel6.TabIndex = 43;
             // 
+            // label31
+            // 
+            label31.AutoSize = true;
+            label31.Font = new Font("Arial", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            label31.Location = new Point(220, 72);
+            label31.Name = "label31";
+            label31.Size = new Size(75, 19);
+            label31.TabIndex = 38;
+            label31.Text = "ND MK 3";
+            // 
+            // ND_Mk_3_lbl
+            // 
+            ND_Mk_3_lbl.AutoSize = true;
+            ND_Mk_3_lbl.Font = new Font("Times New Roman", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            ND_Mk_3_lbl.Location = new Point(308, 72);
+            ND_Mk_3_lbl.Name = "ND_Mk_3_lbl";
+            ND_Mk_3_lbl.Size = new Size(103, 19);
+            ND_Mk_3_lbl.TabIndex = 36;
+            ND_Mk_3_lbl.Text = "PlaceHolder";
+            // 
+            // ND_Mk_1_tb
+            // 
+            ND_Mk_1_tb.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            ND_Mk_1_tb.Location = new Point(96, 71);
+            ND_Mk_1_tb.Name = "ND_Mk_1_tb";
+            ND_Mk_1_tb.Size = new Size(103, 30);
+            ND_Mk_1_tb.TabIndex = 16;
+            ND_Mk_1_tb.KeyUp += ND_Mk_1_tb_TextChanged;
+            // 
             // M_16_frag_lbl
             // 
             M_16_frag_lbl.AutoSize = true;
@@ -543,16 +576,6 @@ namespace DesktopApp.UserControls
             M_16_frag_lbl.Size = new Size(103, 19);
             M_16_frag_lbl.TabIndex = 37;
             M_16_frag_lbl.Text = "PlaceHolder";
-            // 
-            // ND_Mk_1_lbl
-            // 
-            ND_Mk_1_lbl.AutoSize = true;
-            ND_Mk_1_lbl.Font = new Font("Times New Roman", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            ND_Mk_1_lbl.Location = new Point(96, 71);
-            ND_Mk_1_lbl.Name = "ND_Mk_1_lbl";
-            ND_Mk_1_lbl.Size = new Size(103, 19);
-            ND_Mk_1_lbl.TabIndex = 36;
-            ND_Mk_1_lbl.Text = "PlaceHolder";
             // 
             // Nmm_14_lbl
             // 
@@ -825,11 +848,11 @@ namespace DesktopApp.UserControls
             Terrain_Dropdown.DropDownStyle = ComboBoxStyle.DropDownList;
             Terrain_Dropdown.FormattingEnabled = true;
             dropDownModel1.Label = "Mountains";
-            dropDownModel1.Value = (int)Terrain.Mountains;
+            dropDownModel1.Value = 1;
             dropDownModel2.Label = "Plains";
-            dropDownModel2.Value = (int)Terrain.Plains;
+            dropDownModel2.Value = 2;
             dropDownModel3.Label = "Deserts";
-            dropDownModel3.Value = (int)Terrain.Deserts;
+            dropDownModel3.Value = 3;
             Terrain_Dropdown.Items.AddRange(new object[] { dropDownModel1, dropDownModel2, dropDownModel3 });
             Terrain_Dropdown.Location = new Point(119, 68);
             Terrain_Dropdown.Name = "Terrain_Dropdown";
@@ -852,11 +875,11 @@ namespace DesktopApp.UserControls
             arms_dropdown.DropDownStyle = ComboBoxStyle.DropDownList;
             arms_dropdown.FormattingEnabled = true;
             dropDownModel4.Label = "Infantry";
-            dropDownModel4.Value = (int)Arms.Infantry;
+            dropDownModel4.Value = 1;
             dropDownModel5.Label = "Engineer";
-            dropDownModel5.Value = (int)Arms.Engineer;
+            dropDownModel5.Value = 2;
             dropDownModel6.Label = "PMF";
-            dropDownModel6.Value = (int)Arms.PMF;
+            dropDownModel6.Value = 3;
             arms_dropdown.Items.AddRange(new object[] { dropDownModel4, dropDownModel5, dropDownModel6 });
             arms_dropdown.Location = new Point(119, 35);
             arms_dropdown.Name = "arms_dropdown";
@@ -956,7 +979,7 @@ namespace DesktopApp.UserControls
         private Label label28;
         private Label label29;
         private Label M_16_frag_lbl;
-        private Label ND_Mk_1_lbl;
+        private Label ND_Mk_3_lbl;
         private Panel panel8;
         private Label label23;
         private Label label24;
@@ -990,5 +1013,7 @@ namespace DesktopApp.UserControls
         private Label label33;
         private Label lbl_terrain;
         private ComboBox Terrain_Dropdown;
+        private Label label31;
+        private TextBox ND_Mk_1_tb;
     }
 }

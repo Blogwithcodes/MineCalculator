@@ -27,13 +27,13 @@ namespace DesktopApp.UserControls
                 AntiPers_Lbl.Text = CalculateAntiPers();
                 Anti_tk_lbl.Text = CalculateAntiTK();
                 Fragment_lbl.Text = CalculateFrag();
-                TotalMines_Lbl.Text = $"{CalculateTotalMine()} * 3 Ton";
+                TotalMines_Lbl.Text = $"{CalculateTotalMine()} * ALS";
                 sharedDataModel.TotalMineLorry = double.Parse(CalculateTotalMine());
                 perimeter.Text = sharedDataModel.Perimeter.ToString();
                 lorryLD_lbl.Text = CalculateLorryLd();
                 totalVEH_lbl.Text = CalculateTotalVeh();
-                TpCarriage.Text = "1*Jeep + 2 * 3Tons";
-                Total_lbl.Text = $" {CalculateTotal()} * 3 Ton + 1 * Jeep";
+                TpCarriage.Text = "1*Jeep + 2 * ALS";
+                Total_lbl.Text = $" {CalculateTotal()} * HMV + 1 * Jeep";
             }
             catch (Exception ex)
             {

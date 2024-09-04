@@ -51,7 +51,7 @@ namespace DesktopApp.UserControls
             if (double.TryParse(CalculateISL(), out double isl) && double.TryParse(CalculateVSL(), out double vsl))
             {
                 double _result = isl + vsl;
-                return _result.ToString();
+                return Math.Ceiling(_result).ToString();
             }
             else
             {
@@ -68,7 +68,7 @@ namespace DesktopApp.UserControls
             if (double.TryParse(CalculateISL(), out double isl) && double.TryParse(CalculateVSL(), out double vsl))
             {
                 double _result = (isl + vsl) / 20;
-                return _result.ToString();
+                return Math.Ceiling(_result).ToString();
             }
             else
             {
@@ -85,7 +85,7 @@ namespace DesktopApp.UserControls
             if (double.TryParse(CalculateISL(), out double isl) && double.TryParse(CalculateVSL(), out double vsl))
             {
                 double _result = (isl + vsl) / 20;
-                return _result.ToString();
+                return Math.Ceiling(_result).ToString();
             }
             else
             {
@@ -102,7 +102,7 @@ namespace DesktopApp.UserControls
             double _result = (sharedDataModel.Depth * sharedDataModel.Inf_Safe_Line) + ((sharedDataModel.Depth * sharedDataModel.Inf_Safe_Line) * 0.1);
 
             // Display the result
-            return _result.ToString();
+            return Math.Ceiling(_result).ToString();
 
         }
         private string CalculateVSL()
@@ -112,7 +112,7 @@ namespace DesktopApp.UserControls
             double _result = (sharedDataModel.Depth * 2 * sharedDataModel.VSL) + ((sharedDataModel.Depth * 2 * sharedDataModel.VSL) * 0.1);
 
             // Display the result
-            return _result.ToString();
+            return Math.Ceiling(_result).ToString();
 
         }
         private string CalculateWire22()
@@ -122,7 +122,7 @@ namespace DesktopApp.UserControls
             double _result = double.Parse(CalculateMineFd()) * 0.15;
 
             // Display the result
-            return _result.ToString();
+            return Math.Ceiling(_result).ToString();
 
         }
         private string CalculateLAIPS()

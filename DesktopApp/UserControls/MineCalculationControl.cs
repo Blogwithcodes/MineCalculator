@@ -24,15 +24,15 @@ namespace DesktopApp.UserControls
             InitializeComponent();
 
             //For testing purpose 
-            frontage_tb.Text = "1000";
-            A_Pers_tb.Text = "1";
-            A_Tk_tb.Text = "1";
-            Frag_tb.Text = "1";
-            VSL_tb.Text = "1";
-            Inf_safe_Line_tb.Text = "1";
-            Depth_tb.Text = "300";
-            arms_dropdown.SelectedIndex = 1;
-            Terrain_Dropdown.SelectedIndex = 1;
+            //frontage_tb.Text = "1000";
+            //A_Pers_tb.Text = "1";
+            //A_Tk_tb.Text = "1";
+            //Frag_tb.Text = "1";
+            //VSL_tb.Text = "1";
+            //Inf_safe_Line_tb.Text = "1";
+            //Depth_tb.Text = "300";
+            //arms_dropdown.SelectedIndex = 1;
+            //Terrain_Dropdown.SelectedIndex = 1;
 
             // InitializeToastTimer();
         }
@@ -115,7 +115,7 @@ namespace DesktopApp.UserControls
                 Anit_Mines_16_lbl.Text = CalculateNoOfMine(Frag_tb.Text, frontage_tb.Text);
                 DropDownModel armSelectedItem = (DropDownModel)arms_dropdown.SelectedItem;
                 DropDownModel terrainSelectedItem = (DropDownModel)Terrain_Dropdown.SelectedItem;
-                sharedDataModel.RateOfLaying = Helper.GetRateOfLaying((Arms)armSelectedItem.Value,(Terrain) terrainSelectedItem.Value);
+                sharedDataModel.RateOfLaying = Helper.GetRateOfLaying((Arms)armSelectedItem.Value, (Terrain)terrainSelectedItem.Value);
                 //Time and Resources 
                 No_of_Mine_lbl.Text = CalculateTotalMines();
                 Rate_Of_Laying_lbl.Text = sharedDataModel.RateOfLaying.ToString() + " MINES/24 HR CYCLE BY " + ((sharedDataModel.RateOfLaying == 700) ? "EMLP" : "MLP");
@@ -123,7 +123,8 @@ namespace DesktopApp.UserControls
 
                 // Avaiable Mines 
                 Nmm_14_lbl.Text = Anit_Pers_Mines_Lbl.Text;
-                ND_Mk_1_lbl.Text = Anti_Tank_Mines_lbl.Text;
+                ND_Mk_3_lbl.Text = CalculateND_MK(Anti_Tank_Mines_lbl.Text);
+                ND_Mk_1_tb.Text = CalculateND_MK(Anti_Tank_Mines_lbl.Text);
                 M_16_frag_lbl.Text = Anit_Mines_16_lbl.Text;
 
                 //No of strips 
@@ -164,7 +165,8 @@ namespace DesktopApp.UserControls
                 sharedDataModel.No_of_Mine = double.Parse(No_of_Mine_lbl.Text);
                 sharedDataModel.MLPs_Required = double.Parse(CalculateMLP());
                 sharedDataModel.Nmm_14 = double.Parse(Nmm_14_lbl.Text);
-                sharedDataModel.ND_Mk_1 = double.Parse(ND_Mk_1_lbl.Text);
+                sharedDataModel.ND_Mk_1 = double.Parse(ND_Mk_3_lbl.Text);
+                sharedDataModel.ND_Mk_3 = double.Parse(ND_Mk_1_tb.Text);
                 sharedDataModel.Rate_Of_Laying = sharedDataModel.RateOfLaying;
 
                 sharedDataModel.M_16_frag = double.Parse(M_16_frag_lbl.Text);
@@ -207,7 +209,7 @@ namespace DesktopApp.UserControls
                     double _result = Math.Round((A_Pers / 1), 2);
 
                     // Display the result
-                    return _result.ToString();
+                    return Math.Ceiling(_result).ToString();
                 }
                 else
                 {
@@ -222,7 +224,7 @@ namespace DesktopApp.UserControls
                     double _result = Math.Round((A_tk / (1.0 / 3.0)), 2);
 
                     // Display the result
-                    return _result.ToString();
+                    return Math.Ceiling(_result).ToString();
                 }
                 else
                 {
@@ -238,7 +240,7 @@ namespace DesktopApp.UserControls
                     double _result = Math.Round((Frag / (1.0 / 12.0)), 2);
 
                     // Display the result
-                    return _result.ToString();
+                    return Math.Ceiling(_result).ToString();
                 }
                 else
                 {
@@ -323,11 +325,29 @@ namespace DesktopApp.UserControls
                 double _result = Anti_Pers + Anti_Tank + Anti_Mines;
 
                 // Display the result
-                return _result.ToString();
+                return Math.Ceiling(_result).ToString();
             }
             else
             {
                 throw new Exception("Error while calculation total mines");
+            }
+
+        }
+
+        private string CalculateND_MK( string Anti_Tank_Mines)
+        {
+            if (double.TryParse(Anti_Tank_Mines, out double mines) )
+            {
+                // Calculate the result using the formula
+                double _result = (mines) /2;
+
+                // Display the result
+                return _result.ToString();
+            }
+            else
+            {
+
+                throw new Exception("Please enter valid data for Anti Tank Mines.");
             }
 
         }
@@ -340,7 +360,7 @@ namespace DesktopApp.UserControls
                 double _result = (density * frontage) + (0.1 * density * frontage);
 
                 // Display the result
-                return _result.ToString();
+                return Math.Ceiling(_result).ToString();
             }
             else
             {
@@ -472,15 +492,62 @@ namespace DesktopApp.UserControls
         }
         private string TerrainDropdownCheck()
         {
-            if (Terrain_Dropdown.SelectedIndex == -1) 
+            if (Terrain_Dropdown.SelectedIndex == -1)
             {
                 errorProvider.SetError(Terrain_Dropdown, "Please select a value from the dropdown.");
                 return "ERROR";
             }
             else
             {
-                errorProvider.SetError(Terrain_Dropdown, ""); 
-                return "NOERROR";                                    
+                errorProvider.SetError(Terrain_Dropdown, "");
+                return "NOERROR";
+            }
+        }
+
+        private void ND_Mk_1_tb_TextChanged(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (
+                  double.TryParse(Anti_Tank_Mines_lbl.Text, out double Anti_Tank) &&
+                  double.TryParse(ND_Mk_1_tb.Text, out double ND_Mk_1))
+                {
+
+                    if(ND_Mk_1> Anti_Tank)
+                    {
+                        MessageBox.Show("Submission of ND_MK_1 and NM_Mk_3 should equal to Anti Tank Mines", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ND_Mk_3_lbl.Text = "0";
+                        ND_Mk_1_tb.Text = Anti_Tank_Mines_lbl.Text;
+                        return;
+                    }
+                    // Calculate the result using the formula
+                    double _result = Anti_Tank - ND_Mk_1;
+
+                    if (_result > Anti_Tank)
+                    {
+                        MessageBox.Show("Submission of ND_MK_1 and NM_Mk_3 should equal to Anti Tank Mines", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ND_Mk_3_lbl.Text = Anti_Tank_Mines_lbl.Text;
+                        ND_Mk_1_tb.Text = "0";
+                        return;
+                    }
+                    else
+                    {
+                        // Display the result
+                        ND_Mk_3_lbl.Text = _result.ToString();
+                        UpdateSharedDataModel();
+                    }
+                }
+                else
+                {
+
+                    throw new Exception("Please enter valid data for ND MK 1");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ND_Mk_3_lbl.Text = Anti_Tank_Mines_lbl.Text;
+                ND_Mk_1_tb.Text = "0";
             }
         }
     }

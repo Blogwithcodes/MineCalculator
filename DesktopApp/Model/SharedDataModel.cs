@@ -18,6 +18,7 @@ namespace DesktopApp.Model
         public double MLPs_Required { get; set; }
         public double Nmm_14 { get; set; }
         public double ND_Mk_1 { get; set; }
+        public double ND_Mk_3 { get; set; }
         public double M_16_frag { get; set; }
         public double strips_A_Per { get; set; }
         public double A_tk_strips { get; set; }

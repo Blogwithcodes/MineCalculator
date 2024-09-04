@@ -23,15 +23,15 @@ namespace DesktopApp.UserControls
         {
             if (sharedDataModel != null && sharedDataModel.IsMineCalculated)
             {
-                WoodenPegFrag_Lbl.Text = (sharedDataModel.M_16_frag * 2).ToString() + " Nos";
-                ALDS_lbl.Text = (sharedDataModel.Anti_Tank_Mines * 0.1).ToString() + " Nos";
-                Switch_lbl.Text = (sharedDataModel.Anti_Tank_Mines * 0.1).ToString() + " Nos";
-                Snouts_lbl.Text = (sharedDataModel.Anti_Tank_Mines * 0.1).ToString() + " Nos";
-                detonator_lbl.Text = (sharedDataModel.Anti_Tank_Mines * 0.1 * 2).ToString() + " Nos";
-                GcSlabs_Lbl.Text = (sharedDataModel.Anti_Tank_Mines * 0.1).ToString() + " Nos";
-                JnCLips_lbl.Text = (sharedDataModel.Anti_Tank_Mines * 0.1).ToString() + " Nos";
-                DetonationCord_lbl.Text = (sharedDataModel.Anti_Tank_Mines * 0.1 * 2).ToString() + " M";
-                SealingCaps_lbl.Text = (sharedDataModel.Anti_Tank_Mines * 0.1 * 2).ToString() + " Nos";
+                WoodenPegFrag_Lbl.Text = (Math.Ceiling(sharedDataModel.M_16_frag * 2)).ToString() + " Nos";
+                ALDS_lbl.Text = (Math.Ceiling(sharedDataModel.Anti_Tank_Mines * 0.1)).ToString() + " Nos";
+                Switch_lbl.Text = (Math.Ceiling(sharedDataModel.Anti_Tank_Mines * 0.1)).ToString() + " Nos";
+                Snouts_lbl.Text = (Math.Ceiling(sharedDataModel.Anti_Tank_Mines * 0.1)).ToString() + " Nos";
+                detonator_lbl.Text = (Math.Ceiling(sharedDataModel.Anti_Tank_Mines * 0.1 * 2)).ToString() + " Nos";
+                GcSlabs_Lbl.Text = (Math.Ceiling(sharedDataModel.Anti_Tank_Mines * 0.1)).ToString() + " Nos";
+                JnCLips_lbl.Text = (Math.Ceiling(sharedDataModel.Anti_Tank_Mines * 0.1)).ToString() + " Nos";
+                DetonationCord_lbl.Text = (Math.Ceiling(sharedDataModel.Anti_Tank_Mines * 0.1 * 2)).ToString() + " M";
+                SealingCaps_lbl.Text = (Math.Ceiling(sharedDataModel.Anti_Tank_Mines * 0.1 * 2)).ToString() + " Nos";
             }
         }
 
